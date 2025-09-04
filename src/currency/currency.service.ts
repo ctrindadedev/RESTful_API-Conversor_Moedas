@@ -56,3 +56,13 @@ export class CurrencyService {
     return parseFloat(convertedAmount.toFixed(2));
   }
 }
+
+// Expanda o CurrencyService: Adicione uma função ao serviço que permita
+// atualizar as taxas de câmbio. Simule a atualização das taxas de câmbio com
+// valores diferentes.
+// 2. Adicione Mais Moedas: Expanda a lista de moedas suportadas pelo serviço
+// adicionando pelo menos mais três moedas com suas respectivas taxas de
+// câmbio.
+// 3. Teste a Lógica de Conversão: Adicione testes no arquivo
+// currency.service.spec.ts para verificar se a lógica de conversão está
+// funcionando corretamente.
