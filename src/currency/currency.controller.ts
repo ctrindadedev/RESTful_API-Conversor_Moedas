@@ -1,16 +1,16 @@
 import { Body, Controller, Get, Post, Query } from "@nestjs/common";
 import { CurrencyService } from "./currency.service";
 import { Currency } from "./currency.entity";
+import { ConvertyCurrencyDto } from "./convert-currency.dto";
 @Controller("currency")
 export class CurrencyController {
   constructor(private readonly currencyService: CurrencyService) {}
   @Get("convert")
   async convertCurrency(
     //Aceita três parametros
-    @Query("amount") amount: number,
-    @Query("from") from: string,
-    @Query("to") to: string
+    @Query() query: ConvertyCurrencyDto
   ): Promise<{ convertedAmount: number }> {
+    const { amount, from, to } = query;
     const convertedAmount = await this.currencyService.convertCurrency(
       amount,
       from,
