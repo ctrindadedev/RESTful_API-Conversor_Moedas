@@ -1,4 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Currency } from "./currency.entity";
 
 /**
  * @class CurrencyService
@@ -6,63 +9,40 @@ import { Injectable, NotFoundException } from "@nestjs/common";
  */
 @Injectable()
 export class CurrencyService {
-  /**
-   * @private
-   * @description Lista de moedas e suas taxas de câmbio em relação a uma moeda base
-   */
-  private currencies = [
-    { code: "USD", rate: 1.0 },
-    { code: "EUR", rate: 0.85 },
-    { code: "BRL", rate: 5.25 },
-  ];
+  constructor(
+    @InjectRepository(Currency)
+    private currencyRepository: Repository<Currency>
+  ) {}
 
-  /**
-   * Retorna uma lista com os códigos de todas as moedas disponíveis para conversão
-   * @returns {string[]} Array de strings contendo os códigos das moedas
-   */
-  getAvailableCurrencies(): string[] {
-    return this.currencies.map((currency) => currency.code);
+  async getAvailableCurrencies(): Promise<string[]> {
+    const currencies = await this.currencyRepository.find();
+    return currencies.map((currency) => currency.code);
   }
 
-  /**
-   * Realiza a conversão de um valor entre duas moedas com base nas taxas de câmbio internas
-   *
-   * @param {number} amount - O valor a ser convertido. Deve ser > 0
-   * @param {string} from - O código da moeda de origem
-   * @param {string} to - O código da moeda de destino
-   * @returns {number} - O valor convertido para a moeda de destino
-   * @throws {NotFoundException} Lança uma exceção se o código da moeda de origem ou de destino não for encontrado
-   * * @example
-   * // Exemplo de uso:
-   * const convertedValue = currencyService.convertCurrency(100, 'BRL', 'USD');
-   */
-  convertCurrency(amount: number, from: string, to: string): number {
-    const fromCurrency = this.currencies.find(
-      (currency) => currency.code === from
-    )?.rate;
+  async convertCurrency(
+    amount: number,
+    from: string,
+    to: string
+  ): Promise<number> {
+    const fromCurrency = await this.currencyRepository.findOne({
+      where: { code: from },
+    });
 
-    const toCurrency = this.currencies.find(
-      (currency) => currency.code === to
-    )?.rate;
+    const toCurrency = await this.currencyRepository.findOne({
+      where: { code: to },
+    });
 
     if (!fromCurrency || !toCurrency) {
-      throw new NotFoundException(
-        `Currency code not found. Please use one of the following: ${this.getAvailableCurrencies().join(", ")}`
-      );
+      throw new Error("Currency not found");
     }
 
-    const convertedAmount = (amount / fromCurrency) * toCurrency;
+    const convertedAmount = (amount / fromCurrency.rate) * toCurrency.rate;
+    return convertedAmount;
+  }
 
-    return parseFloat(convertedAmount.toFixed(2));
+  async createCurrency(code: string, rate: number): Promise<Currency> {
+    const currency = this.currencyRepository.create({ code, rate });
+    await this.currencyRepository.save(currency);
+    return currency;
   }
 }
-
-// Expanda o CurrencyService: Adicione uma função ao serviço que permita
-// atualizar as taxas de câmbio. Simule a atualização das taxas de câmbio com
-// valores diferentes.
-// 2. Adicione Mais Moedas: Expanda a lista de moedas suportadas pelo serviço
-// adicionando pelo menos mais três moedas com suas respectivas taxas de
-// câmbio.
-// 3. Teste a Lógica de Conversão: Adicione testes no arquivo
-// currency.service.spec.ts para verificar se a lógica de conversão está
-// funcionando corretamente.
