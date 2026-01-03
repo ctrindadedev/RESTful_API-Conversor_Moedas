@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Currency } from "./currency.entity";
+import { In } from "typeorm/browser/find-options/operator/In.js";
 
 /**
  * @class CurrencyService
@@ -44,5 +45,17 @@ export class CurrencyService {
     const currency = this.currencyRepository.create({ code, rate });
     await this.currencyRepository.save(currency);
     return currency;
+  }
+
+  async updateCurrentRate(code: string, rate: number): Promise<Currency> {
+    const currency = await this.currencyRepository.findOneBy({ code });
+
+    if (!currency) {
+      throw new NotFoundException(`Currency with code ${code} not found`);
+    }
+    
+    currency.rate = rate;
+    
+    return await this.currencyRepository.save(currency);
   }
 }
