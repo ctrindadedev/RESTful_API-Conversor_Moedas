@@ -12,6 +12,7 @@ async function bootstrap() {
       transform: true, // Transforma os payloads para os tipos especificados nos DTOs
     })
   );
+  app.useGlobalFilters;
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
