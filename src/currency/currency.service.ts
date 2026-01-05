@@ -15,6 +15,16 @@ export class CurrencyService {
     private currencyRepository: Repository<Currency>
   ) {}
 
+  async getCurrency(code: string): Promise<Currency> {
+    const currency = await this.currencyRepository.findOne({
+      where: { code: code },
+    });
+    if (!currency) {
+      throw new NotFoundException(`Moeda ${code} não encontrada`);
+    }
+    return currency;
+  }
+
   async getAvailableCurrencies(): Promise<string[]> {
     const currencies = await this.currencyRepository.find();
     return currencies.map((currency) => currency.code);
