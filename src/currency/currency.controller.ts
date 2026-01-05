@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, Patch, Post, Put, Query } from "@nestjs/common";
 import { CurrencyService } from "./currency.service";
 import { Currency } from "./currency.entity";
 import { ConvertyCurrencyDto } from "./convert-currency.dto";
@@ -29,5 +29,13 @@ export class CurrencyController {
     @Body("rate") rate: number
   ): Promise<Currency> {
     return await this.currencyService.createCurrency(code, rate);
+  }
+
+  @Patch()
+  async updateUpdateCurencyRate(
+    @Body("code") code: string,
+    @Body("rate") rate: number
+  ): Promise<Currency> {
+    return await this.currencyService.updateCurrentRate(code, rate);
   }
 }

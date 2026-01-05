@@ -33,9 +33,10 @@ export class CurrencyService {
       where: { code: to },
     });
 
-    if (!fromCurrency || !toCurrency) {
-      throw new Error("Currency not found");
-    }
+    if (!fromCurrency)
+      throw new NotFoundException(`Source currency ${from} not found`);
+    if (!toCurrency)
+      throw new NotFoundException(`Target currency ${to} not found`);
 
     const convertedAmount = (amount / fromCurrency.rate) * toCurrency.rate;
     return convertedAmount;
@@ -53,9 +54,9 @@ export class CurrencyService {
     if (!currency) {
       throw new NotFoundException(`Currency with code ${code} not found`);
     }
-    
+
     currency.rate = rate;
-    
+
     return await this.currencyRepository.save(currency);
   }
 }
