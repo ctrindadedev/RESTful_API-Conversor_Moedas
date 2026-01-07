@@ -8,15 +8,15 @@
   <img alt="Node.js" align="center" height="50" width="50" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original-wordmark.svg" />
   <img alt="NestJS" align="center" height="50" width="50" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nestjs/nestjs-original.svg" />
   <img alt="TypeScript" align="center" height="50" width="50" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg" />
-  <img alt= "Junit"  align="center" height="100" width="100" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/junit/junit-original-wordmark.svg" />
-          
+  <img alt= "Junit"  align="center" height="50" width="50" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jest/jest-plain.svg" />
+        
 </div>
 
 ### Features
 
 - **Controllers:** Request handling and routing.
 - **Services:** Business logic layer.
-- **Unit Tests:** Implementation of automated tests for services, using Junit
+- **Unit Tests:** Implementation of automated tests for services, using Jest
 - **Global Error Handling:** Consistent API responses using Global Exception Filters.
 - **TypeORM:** Database integration and ORM management.
 - **Auth:** Login and Sign-up functionality powered by JWT.
